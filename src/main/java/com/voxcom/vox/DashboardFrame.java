@@ -50,7 +50,6 @@ public class DashboardFrame extends JFrame {
         });
     }
 
-
     private void loadTasks() {
 
         try {
@@ -114,5 +113,12 @@ public class DashboardFrame extends JFrame {
         row.add(lbl, BorderLayout.CENTER);
         row.add(done, BorderLayout.EAST);
         return row;
+    }
+    @Override
+    public void dispose() {
+        if (refreshTimer != null) {
+            refreshTimer.stop();
+        }
+        super.dispose();
     }
 }
