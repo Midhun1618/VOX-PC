@@ -1,0 +1,28 @@
+# Java
+*.class
+
+# Logs
+*.log
+
+# Build folders
+target/
+build/
+out/
+
+# Gradle
+.gradle/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# OS junk
+.DS_Store
+Thumbs.db
+serviceAccountKey.json
