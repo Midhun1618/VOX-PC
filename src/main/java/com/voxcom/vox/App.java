@@ -6,8 +6,15 @@ import javax.swing.SwingUtilities;
 public class App {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            System.out.println("VOX PC App Started");
-            new LoginFrame().setVisible(true);
+            if (SessionManager.isLoggedIn()) {
+                new DashboardFrame(
+                        SessionManager.getUid(),
+                        SessionManager.getEmail(),
+                        SessionManager.getUsername()
+                ).setVisible(true);
+            } else {
+                new LoginFrame().setVisible(true);
+            }
         });
     }
 }
