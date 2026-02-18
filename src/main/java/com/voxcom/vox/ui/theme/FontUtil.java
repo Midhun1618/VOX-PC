@@ -1,4 +1,4 @@
-package com.voxcom.vox.ui;
+package com.voxcom.vox.ui.theme;
 
 import java.awt.Font;
 

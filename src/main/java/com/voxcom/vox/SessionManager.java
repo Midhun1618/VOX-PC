@@ -4,20 +4,26 @@ import java.util.prefs.Preferences;
 
 public class SessionManager {
 
-    private static final Preferences prefs =
-            Preferences.userRoot().node("VOX");
+    private static final Preferences prefs = Preferences.userRoot().node("vox_session");
 
-    public static void saveSession(String uid, String email, String username) {
+    public static void save(String uid, String email, String username, int avatarIndex) {
         prefs.put("uid", uid);
         prefs.put("email", email);
         prefs.put("username", username);
+        prefs.putInt("avatarIndex", avatarIndex);
+        System.out.println(avatarIndex);
+        prefs.putBoolean("loggedIn", true);
+    }
+
+    public static int getAvatarIndex() {
+        return prefs.getInt("avatarIndex", 1);
     }
 
     public static boolean isLoggedIn() {
-        return prefs.get("uid", null) != null;
+        return prefs.getBoolean("loggedIn", false);
     }
 
-    public static String getUid() {
+    public static String getUID() {
         return prefs.get("uid", null);
     }
 
@@ -26,12 +32,13 @@ public class SessionManager {
     }
 
     public static String getUsername() {
-        return prefs.get("username", null);
+        return prefs.get("username", "User");
     }
 
     public static void clear() {
         prefs.remove("uid");
         prefs.remove("email");
         prefs.remove("username");
+        prefs.putBoolean("loggedIn", false);
     }
 }
