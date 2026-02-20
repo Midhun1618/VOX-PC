@@ -8,9 +8,13 @@ import java.awt.*;
 
 public class HomeScreen extends JPanel {
 
+    private final String uid;
+
     private JPanel content;
 
-    public HomeScreen() {
+    public HomeScreen(String uid) {
+
+        this.uid = uid;
 
         setLayout(new BorderLayout());
         setBackground(VoxTheme.BG);
@@ -29,6 +33,7 @@ public class HomeScreen extends JPanel {
         showTasks();
     }
 
+
     private void set(JPanel panel) {
         content.removeAll();
         content.add(panel, BorderLayout.CENTER);
@@ -36,7 +41,8 @@ public class HomeScreen extends JPanel {
         content.repaint();
     }
 
-    private void showTasks() { set(new TasksScreen()); }
-    private void showHistory() { set(new HistoryScreen()); }
+    private void showTasks() { set(new TasksScreen(uid)); }
+    private void showHistory() { set(new HistoryScreen(uid)); }
+
     private void showReminders() { set(new RemindersScreen()); }
 }

@@ -68,8 +68,9 @@ public class DashboardFrame extends JFrame {
 
 
     private void showHome() {
-        setScreen(new HomeScreen());
+        setScreen(new HomeScreen(uid));
     }
+
 
     private void showSettings() {
         setScreen(new SettingsScreen());
