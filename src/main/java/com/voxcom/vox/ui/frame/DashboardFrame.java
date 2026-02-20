@@ -23,6 +23,8 @@ public class DashboardFrame extends JFrame {
 
         setTitle(username + " | VOX");
         setSize(900, 700);
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/voxicon.png"));
+        setIconImage(icon);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -59,10 +61,8 @@ public class DashboardFrame extends JFrame {
 
     private void startClipboardServices() {
 
-    // Firestore listener
         ClipboardSyncService.start(uid, profileSidebar);
 
-        // Windows clipboard listener
         new Thread(ClipboardWatcher::new).start();
     }
 

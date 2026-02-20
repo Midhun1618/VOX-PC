@@ -17,6 +17,8 @@ public class LoginFrame extends JFrame {
 
         setTitle("VOX Login");
         setSize(350, 260);
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/voxicon.png"));
+        setIconImage(icon);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
