@@ -12,12 +12,18 @@ java {
 repositories {
     mavenCentral()
 }
-
 dependencies {
-    // Firebase Admin SDK (brings ALL dependencies automatically)
     implementation 'com.google.firebase:firebase-admin:9.2.0'
+    implementation 'ai.picovoice:porcupine-java:4.0.0'
 }
-
 application {
     mainClass = 'com.voxcom.vox.App'
+}
+tasks.register('runVox', JavaExec) {
+    group = "application"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.voxcom.vox.core.VoxBackground'
+}
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
 }
