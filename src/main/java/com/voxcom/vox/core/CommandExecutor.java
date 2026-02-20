@@ -11,7 +11,7 @@ public class CommandExecutor {
 
         try {
 
-            if (command.contains("open youtube")) {
+            if (command.contains("open this")) {
                 Desktop.getDesktop().browse(new URI("https://youtube.com"));
             }
 
