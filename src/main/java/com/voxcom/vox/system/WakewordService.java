@@ -10,7 +10,14 @@ import java.io.*;
 public class WakewordService {
 
     private static final String ACCESS_KEY = "l4YcMaXwFVLjkElTdruR5vz2fjZ3Vwd0CuGnfDR/lg0ifYd/iQzgmA==";
-    private boolean running = true;
+
+    private volatile boolean running = true;
+    private volatile boolean busy = false;
+
+    private Porcupine porcupine;
+    private TargetDataLine mic;
+    private Thread wakeThread;
+
     private final VoxWidget widget;
 
     public WakewordService(VoxWidget widget) {
@@ -18,7 +25,7 @@ public class WakewordService {
         start();
     }
 
-    // ⭐ Converts resource → real file for native engine
+    // Extract resource file to real temp file (required for native lib)
     private String extractResource(String path) throws Exception {
         InputStream in = getClass().getResourceAsStream(path);
         if (in == null)
@@ -35,14 +42,10 @@ public class WakewordService {
 
     private void start() {
 
-        new Thread(() -> {
-
-            Porcupine porcupine = null;
-            TargetDataLine mic = null;
+        wakeThread = new Thread(() -> {
 
             try {
 
-                // ⭐ IMPORTANT FIX
                 String keywordPath = extractResource("/wakeword/vox.ppn");
                 String modelPath = extractResource("/wakeword/porcupine_params.pv");
 
@@ -53,11 +56,7 @@ public class WakewordService {
                         .build();
 
                 AudioFormat format = new AudioFormat(
-                        porcupine.getSampleRate(),
-                        16,
-                        1,
-                        true,
-                        false
+                        porcupine.getSampleRate(), 16, 1, true, false
                 );
 
                 mic = AudioSystem.getTargetDataLine(format);
@@ -72,49 +71,79 @@ public class WakewordService {
 
                 while (running) {
 
-                    mic.read(buffer, 0, buffer.length);
-
-                    for (int i = 0; i < frameLength; i++) {
-                        pcm[i] = (short)((buffer[i*2] & 0xff) | (buffer[i*2+1] << 8));
+                    if (busy) {
+                        Thread.sleep(80);
+                        continue;
                     }
 
-                    int result = porcupine.process(pcm);
+                    mic.read(buffer, 0, buffer.length);
 
-                    if (result >= 0) {
-                        onWakeWord();
+                    for (int i = 0; i < frameLength; i++)
+                        pcm[i] = (short)((buffer[i*2] & 0xff) | (buffer[i*2+1] << 8));
+
+                    if (porcupine.process(pcm) >= 0) {
+                        handleWake();
                     }
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                if (mic != null) mic.close();
-                if (porcupine != null) porcupine.delete();
             }
+        });
+
+        wakeThread.start();
+    }
+
+    private void handleWake() {
+
+        if (busy) return;
+        busy = true;
+
+        new Thread(() -> {
+
+            try {
+
+                System.out.println("Wake word detected!");
+                widget.setState("detected");
+
+                Thread.sleep(350);
+
+                // STOP PORCUPINE MIC
+                mic.stop();
+                mic.close();
+
+                widget.setState("listening");
+
+                String command = SpeechRecognizer.listen();
+
+                widget.setState("processing");
+                CommandExecutor.execute(command);
+
+                // RESTART WAKE MIC
+                AudioFormat format = new AudioFormat(
+                        porcupine.getSampleRate(), 16, 1, true, false
+                );
+
+                mic = AudioSystem.getTargetDataLine(format);
+                mic.open(format);
+                mic.start();
+
+                widget.setState("idle");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            busy = false;
 
         }).start();
     }
 
-    private void onWakeWord() {
-
-        System.out.println("Wake word detected!");
-
-        widget.setState("detected");
-
-        try { Thread.sleep(600); } catch (Exception ignored) {}
-
-        widget.setState("listening");
-
-        String command = SpeechRecognizer.listen();
-
-        widget.setState("processing");
-
-        CommandExecutor.execute(command);
-
-        widget.setState("idle");
-    }
-
     public void stop() {
         running = false;
+        try {
+            if (mic != null) mic.close();
+            if (porcupine != null) porcupine.delete();
+        } catch (Exception ignored) {}
     }
 }

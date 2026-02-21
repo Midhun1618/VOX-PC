@@ -11,7 +11,6 @@ public class SessionManager {
         prefs.put("email", email);
         prefs.put("username", username);
         prefs.putInt("avatarIndex", avatarIndex);
-        System.out.println(avatarIndex);
         prefs.putBoolean("loggedIn", true);
     }
 
