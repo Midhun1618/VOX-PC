@@ -13,12 +13,15 @@ import java.awt.*;
 
 public class DashboardFrame extends JFrame {
 
+    private static DashboardFrame instance;
+
     private JPanel centerContainer;
     private ProfileSidebar profileSidebar;
     private String uid;
 
-    public DashboardFrame(String uid, String email, String username, int avatarIndex){
+    public DashboardFrame(String uid, String email, String username, int avatarIndex) {
 
+        instance = this;
         this.uid = uid;
 
         setTitle(username + " | VOX");
@@ -33,7 +36,7 @@ public class DashboardFrame extends JFrame {
         centerContainer = new JPanel(new BorderLayout());
         centerContainer.setBackground(VoxTheme.BG);
 
-        profileSidebar = new ProfileSidebar(username, email,avatarIndex);
+        profileSidebar = new ProfileSidebar(username, email, avatarIndex);
 
         // NAVIGATION PANEL
         LeftSidebar sidebar = new LeftSidebar(
@@ -41,8 +44,7 @@ public class DashboardFrame extends JFrame {
                 email,
                 this::showHome,
                 this::showSettings,
-                this::logout
-        );
+                this::logout);
 
         // Combine both panels
         JPanel leftPanel = new JPanel(new BorderLayout());
@@ -66,13 +68,11 @@ public class DashboardFrame extends JFrame {
         new Thread(ClipboardWatcher::new).start();
     }
 
-
-    private void showHome() {
+    public void showHome() {
         setScreen(new HomeScreen(uid));
     }
 
-
-    private void showSettings() {
+    public void showSettings() {
         setScreen(new SettingsScreen());
     }
 
@@ -89,4 +89,19 @@ public class DashboardFrame extends JFrame {
         centerContainer.revalidate();
         centerContainer.repaint();
     }
+
+    public void bringToFront() {
+
+        if (!isVisible()) {
+            setVisible(true);
+        }
+        setExtendedState(JFrame.NORMAL);
+        toFront();
+        requestFocus();
+    }
+
+    public static DashboardFrame getInstance() {
+        return instance;
+    }
+
 }

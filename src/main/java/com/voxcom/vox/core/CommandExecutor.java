@@ -4,35 +4,43 @@ import java.awt.Desktop;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 
 import com.voxcom.vox.App;
-import com.voxcom.vox.App;
+import com.voxcom.vox.ui.frame.DashboardFrame;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class CommandExecutor {
 
+    private static final int KEY_VOLUME_UP = 0xAF;
+    private static final int KEY_VOLUME_DOWN = 0xAE;
+    private static final int KEY_VOLUME_MUTE = 0xAD;
+
     public static void execute(String command) {
 
         command = command.toLowerCase();
+        DashboardFrame dash = DashboardFrame.getInstance();
 
         try {
 
             if (command.contains("open youtube")) {
                 Desktop.getDesktop().browse(new URI("https://youtube.com"));
             } else if (command.contains("open dashboard")) {
-                if (App.dashboard != null) {
+                if (dash!= null) {
                     javax.swing.SwingUtilities.invokeLater(() -> {
-                        App.dashboard.bringToFront();
+                        dash.bringToFront();
                     });
                 }
                 return;
             } else if (command.contains("minimize dashboard")) {
 
-                if (App.dashboard != null) {
+                if (dash != null) {
 
                     SwingUtilities.invokeLater(() -> {
-                        App.dashboard.setState(JFrame.ICONIFIED);
+                        dash.setState(JFrame.ICONIFIED);
                     });
 
                 }
@@ -40,11 +48,11 @@ public class CommandExecutor {
                 return;
             } else if (command.contains("show settings panel")) {
 
-                if (App.dashboard != null) {
+                if (dash != null) {
 
                     SwingUtilities.invokeLater(() -> {
-                        App.dashboard.bringToFront();
-                        App.dashboard.showSettings();
+                        dash.bringToFront();
+                        dash.showSettings();
                     });
 
                 }
@@ -52,39 +60,110 @@ public class CommandExecutor {
                 return;
             } else if (command.contains("show task panel")) {
 
-                if (App.dashboard != null) {
+                if (dash != null) {
 
                     SwingUtilities.invokeLater(() -> {
-                        App.dashboard.bringToFront();
-                        App.dashboard.showHome();
+                        dash.bringToFront();
+                        dash.showHome();
                     });
 
                 }
 
             }
-            if (command.startsWith("search ")||command.startsWith("ask google")) {
+            else if (command.startsWith("search ") || command.startsWith("ask google")) {
                 String query = "";
                 try {
-                    if(command.contains("ask google")){
+                    if (command.contains("ask google")) {
                         query = command.replaceFirst("search ", "").trim();
-                    }else if(command.contains("search")){
+                    } else if (command.contains("search")) {
                         query = command.replaceFirst("search ", "").trim();
                     }
-                   
 
                     if (!query.isEmpty()) {
-                        if(command.contains("in youtube")){
+                        if (command.contains("in youtube")) {
                             String queryNew = query.replaceFirst("in youtube", "").trim();
                             String encoded = URLEncoder.encode(query, StandardCharsets.UTF_8);
                             String url = "https://www.youtube.com/search?q=" + encoded;
                             Desktop.getDesktop().browse(new URI(url));
-                        }else{
+                        } else {
                             String encoded = URLEncoder.encode(query, StandardCharsets.UTF_8);
                             String url = "https://www.google.com/search?q=" + encoded;
                             Desktop.getDesktop().browse(new URI(url));
                             System.out.println("Searching Google for: " + query);
                         }
                     }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return;
+            } else if (command.contains("increase volume") || command.contains("volume up")) {
+
+                try {
+
+                    Robot robot = new Robot();
+
+                    for (int i = 0; i < 10; i++) {
+                        robot.keyPress(KEY_VOLUME_UP);
+                        robot.keyRelease(KEY_VOLUME_UP);
+                    }
+
+                    System.out.println("Volume increased");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return;
+            } else if (command.contains("decrease volume") || command.contains("volume down")) {
+
+                try {
+
+                    Robot robot = new Robot();
+
+                    for (int i = 0; i < 10; i++) {
+                        robot.keyPress(KEY_VOLUME_DOWN);
+                        robot.keyRelease(KEY_VOLUME_DOWN);
+                    }
+
+                    System.out.println("Volume increased");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return;
+            }
+            else if (command.contains("mute volume") || command.contains("mute")) {
+
+                try {
+
+                    Robot robot = new Robot();
+
+                    robot.keyPress(KEY_VOLUME_MUTE);
+                    robot.keyRelease(KEY_VOLUME_MUTE);
+
+                    System.out.println("Volume muted");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return;
+            }
+            else if (command.contains("maximum volume") || command.contains("max volume")) {
+
+                try {
+
+                    Robot robot = new Robot();
+
+                    for (int i = 0; i <= 10; i++) {
+                        robot.keyPress(KEY_VOLUME_UP);
+                        robot.keyRelease(KEY_VOLUME_UP);
+                    }
+
+                    System.out.println("Volume max");
 
                 } catch (Exception e) {
                     e.printStackTrace();
