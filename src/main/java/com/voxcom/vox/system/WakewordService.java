@@ -25,8 +25,8 @@ public class WakewordService {
         start();
     }
 
-    // Extract resource file to real temp file (required for native lib)
     private String extractResource(String path) throws Exception {
+
         InputStream in = getClass().getResourceAsStream(path);
         if (in == null)
             throw new RuntimeException("Missing resource: " + path);
@@ -37,7 +37,43 @@ public class WakewordService {
         try (FileOutputStream out = new FileOutputStream(temp)) {
             in.transferTo(out);
         }
+
         return temp.getAbsolutePath();
+    }
+
+    private TargetDataLine getRealMic(AudioFormat format) throws Exception {
+
+        Mixer.Info[] mixers = AudioSystem.getMixerInfo();
+
+        for (Mixer.Info info : mixers) {
+
+            String name = info.getName().toLowerCase();
+
+            // skip fake/loopback devices
+            if (name.contains("speaker") ||
+                name.contains("stereo") ||
+                name.contains("primary") ||
+                name.contains("port"))
+                continue;
+
+            Mixer mixer = AudioSystem.getMixer(info);
+
+            for (Line.Info lineInfo : mixer.getTargetLineInfo()) {
+
+                if (lineInfo instanceof DataLine.Info dataLine) {
+                    try {
+                        TargetDataLine line = (TargetDataLine) mixer.getLine(dataLine);
+                        line.open(format);
+
+                        System.out.println("Wake mic: " + info.getName());
+                        return line;
+
+                    } catch (Exception ignored) {}
+                }
+            }
+        }
+
+        throw new RuntimeException("No usable microphone found");
     }
 
     private void start() {
@@ -56,11 +92,9 @@ public class WakewordService {
                         .build();
 
                 AudioFormat format = new AudioFormat(
-                        porcupine.getSampleRate(), 16, 1, true, false
-                );
+                        porcupine.getSampleRate(), 16, 1, true, false);
 
-                mic = AudioSystem.getTargetDataLine(format);
-                mic.open(format);
+                mic = getRealMic(format);
                 mic.start();
 
                 int frameLength = porcupine.getFrameLength();
@@ -79,11 +113,10 @@ public class WakewordService {
                     mic.read(buffer, 0, buffer.length);
 
                     for (int i = 0; i < frameLength; i++)
-                        pcm[i] = (short)((buffer[i*2] & 0xff) | (buffer[i*2+1] << 8));
+                        pcm[i] = (short) ((buffer[i * 2] & 0xff) | (buffer[i * 2 + 1] << 8));
 
-                    if (porcupine.process(pcm) >= 0) {
+                    if (porcupine.process(pcm) >= 0)
                         handleWake();
-                    }
                 }
 
             } catch (Exception e) {
@@ -101,42 +134,61 @@ public class WakewordService {
 
         new Thread(() -> {
 
+            File audio = null;
+
             try {
 
                 System.out.println("Wake word detected!");
+                SoundPlayer.play("/sounds/sfx_hello.wav");
                 widget.setState("detected");
 
                 Thread.sleep(350);
-
-                // STOP PORCUPINE MIC
                 mic.stop();
                 mic.close();
 
                 widget.setState("listening");
 
-                String command = SpeechRecognizer.listen();
+                audio = MicRecorder.record(4);
+
+                String command = WhisperRecognizer.recognize(audio);
+
+                System.out.println("Heard: " + command);
+
+                if (command == null || command.isBlank()) {
+                    widget.setState("offline");
+                    SoundPlayer.play("/sounds/sfx_sorry.wav");
+                    Thread.sleep(1500);
+                    return;
+                }
 
                 widget.setState("processing");
+                SoundPlayer.play("/sounds/sfx_done.wav");
+
                 CommandExecutor.execute(command);
-
-                // RESTART WAKE MIC
-                AudioFormat format = new AudioFormat(
-                        porcupine.getSampleRate(), 16, 1, true, false
-                );
-
-                mic = AudioSystem.getTargetDataLine(format);
-                mic.open(format);
-                mic.start();
-
-                widget.setState("idle");
 
             } catch (Exception e) {
                 e.printStackTrace();
+                widget.setState("offline");
+            } finally {
+
+                try {
+                    restartWakeMic();
+                } catch (Exception ignored) {}
+
+                widget.setState("idle");
+                busy = false;
             }
 
-            busy = false;
-
         }).start();
+    }
+
+    private void restartWakeMic() throws Exception {
+
+        AudioFormat format = new AudioFormat(
+                porcupine.getSampleRate(), 16, 1, true, false);
+
+        mic = getRealMic(format);
+        mic.start();
     }
 
     public void stop() {

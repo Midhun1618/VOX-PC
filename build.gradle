@@ -15,8 +15,9 @@ repositories {
 dependencies {
     implementation 'com.google.firebase:firebase-admin:9.2.0'
     implementation 'ai.picovoice:porcupine-java:4.0.0'
-    implementation 'com.alphacephei:vosk:0.3.45'
     implementation 'org.json:json:20240303'
+    implementation platform('com.google.cloud:libraries-bom:26.43.0')
+    implementation 'com.google.cloud:google-cloud-speech'
 }
 application {
     mainClass = 'com.voxcom.vox.App'

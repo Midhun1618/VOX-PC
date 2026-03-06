@@ -50,6 +50,7 @@ public class VoxWidget {
             case "detected" -> "/widget_states/state_wake.png";
             case "listening" -> "/widget_states/state_listen.png";
             case "processing" -> "/widget_states/state_process.png";
+            case "offline" -> "/widget_states/state_sorry.png";
             default -> "/widget_states/state_idle.png";
         };
 

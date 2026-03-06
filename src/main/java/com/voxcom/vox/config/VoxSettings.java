@@ -42,4 +42,11 @@ public class VoxSettings {
     public static synchronized boolean getBoolean(String key) {
         return "true".equalsIgnoreCase(props.getProperty(key));
     }
+    public static boolean isAssistantEnabled() {
+    if (props.getProperty("assistant.enabled") == null) {
+        save("assistant.enabled", "true");
+        return true;
+    }
+    return getBoolean("assistant.enabled");
+}
 }

@@ -8,6 +8,7 @@
 target/
 build/
 out/
+whisper/
 
 # Gradle
 .gradle/
@@ -26,3 +27,4 @@ out/
 .DS_Store
 Thumbs.db
 serviceAccountKey.json
+credential.json

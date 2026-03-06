@@ -11,7 +11,7 @@ public class CommandExecutor {
 
         try {
 
-            if (command.contains("open this")) {
+            if (command.contains("open youtube")) {
                 Desktop.getDesktop().browse(new URI("https://youtube.com"));
             }
 
@@ -19,7 +19,7 @@ public class CommandExecutor {
                 Desktop.getDesktop().browse(new URI("https://google.com"));
             }
 
-            else if (command.contains("exit vox")) {
+            else if (command.contains("shut down")) {
                 System.exit(0);
             }
 

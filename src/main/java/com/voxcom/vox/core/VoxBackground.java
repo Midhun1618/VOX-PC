@@ -12,49 +12,74 @@ public class VoxBackground {
     private static WakewordService wakeService;
     private static VoxWidget widget;
 
-    public static void main(String[] args) throws Exception {
+    private static boolean running = false;
 
-        System.out.println("VOX background started");
-        CommandServer.start();
+    // ---------- START METHOD ----------
+    public static void start() {
 
-        while (true) {
+        if (running) return;
+        running = true;
 
-            boolean enabled = VoxSettings.getBoolean("voice");
+        new Thread(() -> {
 
-            // ---------- START ASSISTANT ----------
-            if (enabled && wakeService == null) {
+            try {
 
-                System.out.println("Starting VOX assistant...");
+                System.out.println("VOX background started");
+                CommandServer.start();
 
-                CountDownLatch latch = new CountDownLatch(1);
+                while (running) {
 
-                // create widget on Swing thread and WAIT
-                SwingUtilities.invokeLater(() -> {
-                    widget = new VoxWidget();
-                    latch.countDown();
-                });
+                    boolean enabled = VoxSettings.getBoolean("voice");
 
-                latch.await(); // IMPORTANT: wait until widget exists
+                    // ---------- START ASSISTANT ----------
+                    if (enabled && wakeService == null) {
 
-                wakeService = new WakewordService(widget);
-            }
+                        System.out.println("Starting VOX assistant...");
 
-            // ---------- STOP ASSISTANT ----------
-            if (!enabled && wakeService != null) {
+                        CountDownLatch latch = new CountDownLatch(1);
 
-                System.out.println("Stopping VOX assistant...");
+                        SwingUtilities.invokeLater(() -> {
+                            widget = new VoxWidget();
+                            latch.countDown();
+                        });
 
-                wakeService.stop();
+                        latch.await();
 
-                if (widget != null) {
-                    widget.close();
-                    widget = null;
+                        wakeService = new WakewordService(widget);
+                    }
+
+                    // ---------- STOP ASSISTANT ----------
+                    if (!enabled && wakeService != null) {
+
+                        System.out.println("Stopping VOX assistant...");
+
+                        wakeService.stop();
+
+                        if (widget != null) {
+                            widget.close();
+                            widget = null;
+                        }
+
+                        wakeService = null;
+                    }
+
+                    Thread.sleep(1000);
                 }
 
-                wakeService = null;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            Thread.sleep(1000);
-        }
+        }).start();
+    }
+
+    // ---------- OPTIONAL STOP METHOD ----------
+    public static void stop() {
+        running = false;
+    }
+
+    // ---------- KEEP MAIN FOR TESTING ----------
+    public static void main(String[] args) {
+        start();
     }
 }
