@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import com.voxcom.vox.App;
 import com.voxcom.vox.ui.frame.DashboardFrame;
@@ -29,7 +31,7 @@ public class CommandExecutor {
             if (command.contains("open youtube")) {
                 Desktop.getDesktop().browse(new URI("https://youtube.com"));
             } else if (command.contains("open dashboard")) {
-                if (dash!= null) {
+                if (dash != null) {
                     javax.swing.SwingUtilities.invokeLater(() -> {
                         dash.bringToFront();
                     });
@@ -69,8 +71,7 @@ public class CommandExecutor {
 
                 }
 
-            }
-            else if (command.startsWith("search ") || command.startsWith("ask google")) {
+            } else if (command.startsWith("search ") || command.startsWith("ask google")) {
                 String query = "";
                 try {
                     if (command.contains("ask google")) {
@@ -82,7 +83,7 @@ public class CommandExecutor {
                     if (!query.isEmpty()) {
                         if (command.contains("in youtube")) {
                             String queryNew = query.replaceFirst("in youtube", "").trim();
-                            String encoded = URLEncoder.encode(query, StandardCharsets.UTF_8);
+                            String encoded = URLEncoder.encode(queryNew, StandardCharsets.UTF_8);
                             String url = "https://www.youtube.com/search?q=" + encoded;
                             Desktop.getDesktop().browse(new URI(url));
                         } else {
@@ -134,8 +135,7 @@ public class CommandExecutor {
                 }
 
                 return;
-            }
-            else if (command.contains("mute volume") || command.contains("mute")) {
+            } else if (command.contains("mute volume") || command.contains("mute")) {
 
                 try {
 
@@ -151,8 +151,7 @@ public class CommandExecutor {
                 }
 
                 return;
-            }
-            else if (command.contains("maximum volume") || command.contains("max volume")) {
+            } else if (command.contains("maximum volume") || command.contains("max volume")) {
 
                 try {
 
@@ -178,7 +177,54 @@ public class CommandExecutor {
 
             else if (command.contains("shut down")) {
                 System.exit(0);
+            } 
+            else if (command.contains("tell the time") || command.contains("what time")) {
+
+                LocalTime time = LocalTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+
+                System.out.println("Current time is: " + time.format(formatter));
+
+                return;
             }
+            else if (command.contains("open mail") || command.contains("open gmail")) {
+
+    Desktop.getDesktop().browse(new URI("https://mail.google.com"));
+
+    return;
+}
+else if (command.contains("open github")) {
+
+    Desktop.getDesktop().browse(new URI("https://github.com"));
+
+    return;
+}
+else if (command.contains("open settings")) {
+
+    Runtime.getRuntime().exec("start ms-settings:");
+
+    return;
+}
+else if (command.contains("increase brightness")) {
+
+    Runtime.getRuntime().exec(
+        "powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,80)"
+    );
+
+    System.out.println("Brightness increased");
+
+    return;
+}
+else if (command.contains("decrease brightness")) {
+
+    Runtime.getRuntime().exec(
+        "powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,30)"
+    );
+
+    System.out.println("Brightness decreased");
+
+    return;
+}
 
             else {
                 System.out.println("Unknown command: " + command);
