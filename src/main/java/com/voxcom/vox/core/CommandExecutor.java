@@ -124,8 +124,8 @@ public class CommandExecutor {
                     Robot robot = new Robot();
 
                     for (int i = 0; i < 10; i++) {
-                        robot.keyPress(KEY_VOLUME_DOWN);
-                        robot.keyRelease(KEY_VOLUME_DOWN);
+                        Runtime.getRuntime().exec(
+                                "powershell -command (new-object -com wscript.shell).SendKeys([char]174)");
                     }
 
                     System.out.println("Volume increased");
@@ -141,8 +141,8 @@ public class CommandExecutor {
 
                     Robot robot = new Robot();
 
-                    robot.keyPress(KEY_VOLUME_MUTE);
-                    robot.keyRelease(KEY_VOLUME_MUTE);
+                    Runtime.getRuntime().exec(
+                            "powershell -command (new-object -com wscript.shell).SendKeys([char]173)");
 
                     System.out.println("Volume muted");
 
@@ -158,8 +158,8 @@ public class CommandExecutor {
                     Robot robot = new Robot();
 
                     for (int i = 0; i <= 10; i++) {
-                        robot.keyPress(KEY_VOLUME_UP);
-                        robot.keyRelease(KEY_VOLUME_UP);
+                        Runtime.getRuntime().exec(
+                                "powershell -command (new-object -com wscript.shell).SendKeys([char]175)");
                     }
 
                     System.out.println("Volume max");
@@ -177,8 +177,7 @@ public class CommandExecutor {
 
             else if (command.contains("shut down")) {
                 System.exit(0);
-            } 
-            else if (command.contains("tell the time") || command.contains("what time")) {
+            } else if (command.contains("tell the time") || command.contains("what time")) {
 
                 LocalTime time = LocalTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
@@ -186,45 +185,58 @@ public class CommandExecutor {
                 System.out.println("Current time is: " + time.format(formatter));
 
                 return;
+            } else if (command.contains("open mail") || command.contains("open gmail")) {
+
+                Desktop.getDesktop().browse(new URI("https://mail.google.com"));
+
+                return;
+            } else if (command.contains("open github")) {
+
+                Desktop.getDesktop().browse(new URI("https://github.com"));
+
+                return;
+            } else if (command.contains("open settings")) {
+
+                Runtime.getRuntime().exec("start ms-settings:");
+
+                return;
+            } else if (command.contains("increase brightness")) {
+
+                Runtime.getRuntime().exec(
+                        "powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,80)");
+
+                System.out.println("Brightness increased");
+
+                return;
+            } else if (command.contains("decrease brightness")) {
+
+                Runtime.getRuntime().exec(
+                        "powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,30)");
+
+                System.out.println("Brightness decreased");
+
+                return;
+            } else if (command.contains("turn on bluetooth") || command.contains("enable bluetooth")) {
+
+                Runtime.getRuntime().exec(new String[] {
+                        "powershell",
+                        "-Command",
+                        "Get-PnpDevice | Where-Object {$_.FriendlyName -like '*Bluetooth*' -and $_.Status -eq 'Disabled'} | Enable-PnpDevice -Confirm:$false"
+                });
+
+                System.out.println("Bluetooth turned on");
+                return;
+            } else if (command.contains("turn off bluetooth") || command.contains("disable bluetooth")) {
+
+                Runtime.getRuntime().exec(new String[] {
+                        "powershell",
+                        "-Command",
+                        "Get-PnpDevice | Where-Object {$_.FriendlyName -like '*Bluetooth*' -and $_.Status -eq 'OK'} | Disable-PnpDevice -Confirm:$false"
+                });
+
+                System.out.println("Bluetooth turned off");
+                return;
             }
-            else if (command.contains("open mail") || command.contains("open gmail")) {
-
-    Desktop.getDesktop().browse(new URI("https://mail.google.com"));
-
-    return;
-}
-else if (command.contains("open github")) {
-
-    Desktop.getDesktop().browse(new URI("https://github.com"));
-
-    return;
-}
-else if (command.contains("open settings")) {
-
-    Runtime.getRuntime().exec("start ms-settings:");
-
-    return;
-}
-else if (command.contains("increase brightness")) {
-
-    Runtime.getRuntime().exec(
-        "powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,80)"
-    );
-
-    System.out.println("Brightness increased");
-
-    return;
-}
-else if (command.contains("decrease brightness")) {
-
-    Runtime.getRuntime().exec(
-        "powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,30)"
-    );
-
-    System.out.println("Brightness decreased");
-
-    return;
-}
 
             else {
                 System.out.println("Unknown command: " + command);
