@@ -9,6 +9,8 @@ target/
 build/
 out/
 whisper/
+dist/
+installer/
 
 # Gradle
 .gradle/

@@ -17,10 +17,6 @@ import javax.swing.SwingUtilities;
 
 public class CommandExecutor {
 
-    private static final int KEY_VOLUME_UP = 0xAF;
-    private static final int KEY_VOLUME_DOWN = 0xAE;
-    private static final int KEY_VOLUME_MUTE = 0xAD;
-
     public static void execute(String command) {
 
         command = command.toLowerCase();
@@ -102,12 +98,9 @@ public class CommandExecutor {
             } else if (command.contains("increase volume") || command.contains("volume up")) {
 
                 try {
-
-                    Robot robot = new Robot();
-
                     for (int i = 0; i < 10; i++) {
-                        robot.keyPress(KEY_VOLUME_UP);
-                        robot.keyRelease(KEY_VOLUME_UP);
+                        Runtime.getRuntime().exec(
+                                "powershell -command (new-object -com wscript.shell).SendKeys([char]175)");
                     }
 
                     System.out.println("Volume increased");
@@ -120,8 +113,6 @@ public class CommandExecutor {
             } else if (command.contains("decrease volume") || command.contains("volume down")) {
 
                 try {
-
-                    Robot robot = new Robot();
 
                     for (int i = 0; i < 10; i++) {
                         Runtime.getRuntime().exec(
@@ -139,8 +130,6 @@ public class CommandExecutor {
 
                 try {
 
-                    Robot robot = new Robot();
-
                     Runtime.getRuntime().exec(
                             "powershell -command (new-object -com wscript.shell).SendKeys([char]173)");
 
@@ -154,8 +143,6 @@ public class CommandExecutor {
             } else if (command.contains("maximum volume") || command.contains("max volume")) {
 
                 try {
-
-                    Robot robot = new Robot();
 
                     for (int i = 0; i <= 10; i++) {
                         Runtime.getRuntime().exec(
@@ -235,6 +222,17 @@ public class CommandExecutor {
                 });
 
                 System.out.println("Bluetooth turned off");
+                return;
+            } else if (command.contains("game time") || (command.contains("start") && command.contains("meeting"))
+                    || command.contains("call boys")) {
+
+                Desktop.getDesktop().browse(new URI("https://meet.google.com/new"));
+                Thread.sleep(6000);
+                Runtime.getRuntime().exec(
+                        "powershell -command (new-object -com wscript.shell).SendKeys('^l')");
+                Runtime.getRuntime().exec(
+                        "powershell -command (new-object -com wscript.shell).SendKeys('^c')");
+
                 return;
             }
 

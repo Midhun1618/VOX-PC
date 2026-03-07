@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 java {
@@ -9,24 +10,18 @@ java {
     }
 }
 
+application {
+    mainClass = 'com.voxcom.vox.App'
+}
+
 repositories {
     mavenCentral()
 }
+
 dependencies {
     implementation 'com.google.firebase:firebase-admin:9.2.0'
     implementation 'ai.picovoice:porcupine-java:4.0.0'
     implementation 'org.json:json:20240303'
     implementation platform('com.google.cloud:libraries-bom:26.43.0')
     implementation 'com.google.cloud:google-cloud-speech'
-}
-application {
-    mainClass = 'com.voxcom.vox.App'
-}
-tasks.register('runVox', JavaExec) {
-    group = "application"
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.voxcom.vox.core.VoxBackground'
-}
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = "UTF-8"
 }

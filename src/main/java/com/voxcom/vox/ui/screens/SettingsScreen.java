@@ -25,8 +25,7 @@ public class SettingsScreen extends JPanel {
 
         // Feature Toggles
         mainPanel.add(createToggle("Clipboard Sync"));
-        mainPanel.add(createToggle("Voice Command"));
-        mainPanel.add(createToggle("Talkback"));
+        mainPanel.add(createToggle("VOX Widget"));
         mainPanel.add(createToggle("Reminder Notification"));
 
         mainPanel.add(Box.createVerticalStrut(30));
