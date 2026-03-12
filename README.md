@@ -90,8 +90,8 @@ Voice pipeline:
 Example command:
 
 ```
-User: "Show my tasks"
-System: Opening tasks dashboard
+User: "Search Chicken Recipe in Youtube"
+System: Opens youtube and show search results
 ```
 
 ---
