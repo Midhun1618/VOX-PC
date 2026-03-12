@@ -4,7 +4,7 @@ import java.io.*;
 
 public class WhisperRecognizer {
 
-    private static final String MODEL = "whisper/model/ggml-base.en.bin";
+    private static final String MODEL = "whisper/model/ggml-tiny.en-q5_1.bin";
 
     private static final String EXECUTABLE = "whisper/whisper-cli.exe";
 
@@ -16,7 +16,7 @@ public class WhisperRecognizer {
                     EXECUTABLE,
                     "-m", MODEL,
                     "-f", wavFile.getAbsolutePath(),
-                    "-nt" // no timestamps
+                    "-nt"
             );
 
             builder.redirectErrorStream(true);
