@@ -14,7 +14,6 @@ public class VoxBackground {
 
     private static boolean running = false;
 
-    // ---------- START METHOD ----------
     public static void start() {
 
         if (running) return;
@@ -31,7 +30,6 @@ public class VoxBackground {
 
                     boolean enabled = VoxSettings.getBoolean("voice");
 
-                    // ---------- START ASSISTANT ----------
                     if (enabled && wakeService == null) {
 
                         System.out.println("Starting VOX assistant...");
@@ -48,11 +46,9 @@ public class VoxBackground {
                         wakeService = new WakewordService(widget);
                     }
 
-                    // ---------- STOP ASSISTANT ----------
                     if (!enabled && wakeService != null) {
 
-                        System.out.println("Stopping VOX assistant...");
-
+                        System.out.println("Stopping VOX assistant");
                         wakeService.stop();
 
                         if (widget != null) {
@@ -73,12 +69,10 @@ public class VoxBackground {
         }).start();
     }
 
-    // ---------- OPTIONAL STOP METHOD ----------
     public static void stop() {
         running = false;
     }
 
-    // ---------- KEEP MAIN FOR TESTING ----------
     public static void main(String[] args) {
         start();
     }

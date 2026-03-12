@@ -227,11 +227,13 @@ public class CommandExecutor {
                     || command.contains("call boys")) {
 
                 Desktop.getDesktop().browse(new URI("https://meet.google.com/new"));
-                Thread.sleep(6000);
-                Runtime.getRuntime().exec(
-                        "powershell -command (new-object -com wscript.shell).SendKeys('^l')");
-                Runtime.getRuntime().exec(
-                        "powershell -command (new-object -com wscript.shell).SendKeys('^c')");
+                Thread.sleep(5000);
+                Runtime.getRuntime().exec("powershell -command (new-object -com wscript.shell).SendKeys('^l')");
+                Thread.sleep(500);
+                Runtime.getRuntime().exec("powershell -command (new-object -com wscript.shell).SendKeys('^c')");
+                
+                Runtime.getRuntime().exec("powershell -command \"(new-object -com wscript.shell).SendKeys('{ESC}')");
+                Runtime.getRuntime().exec("powershell -command \"(new-object -com wscript.shell).SendKeys('{ESC}')");
 
                 return;
             }

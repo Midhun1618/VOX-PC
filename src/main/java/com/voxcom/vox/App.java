@@ -9,6 +9,8 @@ import javax.swing.SwingUtilities;
 
 public class App {
 
+    public static DashboardFrame dashboard;
+
     public static void main(String[] args) {
 
         FirebaseService.getDB();
@@ -17,17 +19,21 @@ public class App {
 
             if (SessionManager.isLoggedIn()) {
 
-                new DashboardFrame(
+                dashboard = new DashboardFrame(
                         SessionManager.getUID(),
                         SessionManager.getEmail(),
                         SessionManager.getUsername(),
-                        SessionManager.getAvatarIndex()).setVisible(true);
+                        SessionManager.getAvatarIndex()
+                );
+
+                dashboard.setVisible(true);
 
             } else {
                 new LoginFrame().setVisible(true);
             }
 
         });
+
         if (VoxSettings.isAssistantEnabled()) {
 
             new Thread(() -> {

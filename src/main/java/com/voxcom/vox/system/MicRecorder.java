@@ -19,7 +19,7 @@ public class MicRecorder {
 
         AudioFormat micFormat = getSupportedFormat();
 
-        // ⭐ use REAL microphone instead of default
+        // use REAL microphone instead of default
         TargetDataLine mic = getRealMic(micFormat);
         mic.start();
 
