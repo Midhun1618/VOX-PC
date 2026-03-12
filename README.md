@@ -1,94 +1,61 @@
 # VOX Desktop (vox-pc)
 
-VOX Desktop is the desktop companion application of the **VOX Cross-Platform Productivity Ecosystem**, designed to synchronize productivity workflows between Android and Windows.
+VOX Desktop is the **Windows companion application** of the VOX Cross-Platform Productivity Ecosystem.  
+It connects with **VOX Android** to create a synchronized productivity environment where users can monitor tasks, execute voice commands, and track productivity metrics in real time.
 
-The desktop client acts as a **central productivity dashboard**, allowing users to monitor tasks, track productivity metrics, and interact with the system using voice commands through **wake word activation and speech recognition**.
+The desktop application acts as a **central productivity dashboard**, integrating voice interaction, cross-device synchronization, and system utilities to enable a seamless workflow.
 
-VOX Desktop focuses on **measurable productivity**, real-time synchronization, and seamless cross-device interaction.
+VOX Desktop emphasizes **measurable productivity, hands-free interaction, and real-time synchronization**.
 
 ---
 
 # Overview
 
-VOX Desktop extends the productivity environment from mobile to desktop.
+VOX Desktop extends productivity from mobile devices to desktop systems.
 
-While **VOX Android** handles task creation and mobile interactions, the desktop application provides a **larger control surface for monitoring tasks and executing voice commands**.
+While **VOX Android** focuses on task creation and mobile interaction, the desktop application provides:
 
-The system integrates:
+- A centralized productivity dashboard
+- Voice command execution
+- Clipboard synchronization
+- Task monitoring and reminders
+- Focus Index productivity analytics
 
-- Wake word detection
-- Speech recognition
-- Command execution pipelines
-- Real-time synchronization
-- Productivity analytics
-
-This allows users to control tasks and interact with the system **hands-free**, improving workflow efficiency.
+The system integrates **wake word detection, offline speech recognition, and command pipelines**, allowing users to interact with the system hands-free.
 
 ---
 
-# Architecture
+# Core Features
 
-VOX Desktop follows a **modular architecture** separating voice processing, synchronization, and UI components.
+## Cross Device Pairing
 
-### UI Layer
-- Desktop dashboard
-- Floating voice widget
-- Task visualization panels
-
-### Voice Interaction Layer
-- Wake word detection engine
-- Speech recognition engine
-- Command parsing system
-
-### Productivity Engine
-- Focus Index calculation
-- Task state management
-- Activity tracking
-
-### Sync Layer
-- Android pairing service
-- Real-time task synchronization
-- Cloud clipboard service
-
-### Data Layer
-- Task storage
-- Session state management
-- Productivity analytics
-
----
-
-# Key Features
-
-## Cross-Device Pairing
-
-VOX Desktop securely connects with VOX Android using a **unique pairing code system**.
+VOX Desktop securely connects with VOX Android using a **pairing code system**.
 
 Features include:
 
-- Secure authentication handshake
-- Device linking
-- Session validation
-
-Once paired, both devices remain synchronized.
+- Secure device authentication
+- Session management
+- Persistent device linking
+- Real time communication
 
 ---
 
-## Real-Time Task Synchronization
+## Real Time Task Synchronization
 
-Tasks created on mobile are automatically synchronized to the desktop dashboard.
+Tasks created on VOX Android are synchronized with the desktop dashboard.
 
 Capabilities include:
 
 - Live task updates
-- Status tracking
-- Cross-device consistency
+- Task state synchronization
 - Activity monitoring
+- Cross device consistency
 
 ---
 
 ## Wake Word Detection
 
-VOX Desktop supports **hands-free system activation** using a wake word detection engine.
+VOX Desktop supports hands-free activation through a wake word detection service.
 
 Example interaction:
 
@@ -97,118 +64,132 @@ User: "VOX"
 System: Wake word detected
 ```
 
-This activates the speech pipeline without requiring manual input.
+Once activated, the system begins listening for commands.
 
 ---
 
-## Speech Recognition Pipeline
+## Speech Recognition (Offline)
 
-Once activated, the system enters listening mode and processes commands using a speech recognition model.
+Voice commands are processed using **Vosk**, an offline speech recognition engine.
 
-Pipeline stages:
+Advantages:
 
-1. Wake word detection  
-2. Voice capture  
-3. Speech-to-text conversion  
-4. Command parsing  
-5. Command execution  
+- Fully offline processing
+- Low latency
+- Lightweight models
+- Real time transcription
 
-Example commands:
+Voice pipeline:
 
-- "Show my tasks"
-- "Mark task complete"
-- "Open dashboard"
+1. Wake word detection
+2. Microphone audio capture
+3. Speech recognition (Vosk)
+4. Command parsing
+5. Command execution
+
+Example command:
+
+```
+User: "Show my tasks"
+System: Opening tasks dashboard
+```
 
 ---
 
-## Voice-Reactive Desktop Widget
+## Voice Reactive Desktop Widget
 
-VOX Desktop includes a floating widget that provides **visual feedback for voice interactions**.
+VOX Desktop includes a floating widget that visually responds to voice activity.
 
 Widget states include:
 
+- Idle
 - Wake detected
 - Listening
 - Processing
 - Command executed
 
-This improves user awareness during voice interactions.
+This provides **visual feedback during voice interactions**.
 
 ---
 
-## Focus Index Dashboard
+## Focus Index Productivity Metric
 
 VOX measures productivity using a metric called **Focus Index**.
 
-Tasks have a **24-hour life cycle**.
+Task lifecycle:
 
-Task states:
+- Tasks expire after 24 hours
+- Completed tasks → Done
+- Incomplete tasks → Missed
 
-Completed → Done  
-Incomplete → Missed  
-
-The productivity score is calculated as:
+Productivity score:
 
 ```
 Focus Index = Done / (Done + Missed)
 ```
 
-This provides a **quantifiable measure of productivity**.
+This allows productivity to be **quantified rather than simply recorded**.
 
 ---
 
 ## Cloud Clipboard Synchronization
 
-VOX Desktop allows users to share clipboard content between devices.
+VOX Desktop synchronizes clipboard content across devices.
 
-Supported actions:
+Capabilities:
 
-- Copy on desktop → paste on Android
-- Copy on Android → paste on desktop
+- Copy text on desktop → paste on mobile
+- Copy text on mobile → paste on desktop
 
-This removes friction when working across devices.
+This improves cross device workflow efficiency.
 
 ---
 
-# System Workflow
+# System Architecture
 
-Typical VOX workflow:
+VOX Desktop follows a **modular layered architecture** separating system services, UI components, networking, and voice processing.
 
-1. User creates tasks on VOX Android
-2. Tasks synchronize with VOX Desktop
-3. Desktop dashboard visualizes tasks and productivity metrics
-4. User interacts using voice commands
-5. VOX processes commands and updates task states
-6. Focus Index updates dynamically
+Main layers include:
+
+### UI Layer
+Handles dashboard screens, widgets, and visual components.
+
+### Voice Processing Layer
+Handles wake word detection, audio capture, and speech recognition.
+
+### Command Layer
+Processes recognized speech and executes commands.
+
+### Sync Layer
+Handles cross device synchronization and cloud communication.
+
+### System Services Layer
+Handles microphone input, audio playback, clipboard monitoring, and network utilities.
 
 ---
 
 # Technology Stack
 
-**Language**
+### Language
 
-- Java
+Java
 
-**Desktop UI**
+### Desktop UI
 
-- Java Swing / JavaFX
+Java Swing
 
-**Voice Processing**
+### Voice Processing
 
-- Wake word detection engine
-- Speech recognition engine
+Wake word detection engine  
+Offline speech recognition using **Vosk**
 
-**Speech Recognition Model**
+### Synchronization
 
-- Whisper
+Firebase Realtime Database
 
-**Synchronization**
+### Architecture
 
-- Cloud-based task synchronization
-
-**Architecture**
-
-- Modular layered architecture
+Modular layered architecture
 
 ---
 
@@ -218,25 +199,96 @@ Typical VOX workflow:
 vox-pc
 │
 ├── src
-│   ├── ui
-│   │   ├── dashboard
-│   │   ├── widget
-│   │   └── components
-│   │
-│   ├── voice
-│   │   ├── wakeword
-│   │   ├── recognition
-│   │   └── command
-│   │
-│   ├── sync
-│   │   ├── pairing
-│   │   └── tasksync
-│   │
-│   ├── productivity
-│   │   ├── focusindex
-│   │   └── taskmanager
-│   │
-│   └── utils
+│   └── main
+│       └── java
+│           └── com
+│               └── voxcom
+│                   └── vox
+│
+│                       ├── config
+│                       │   └── VoxSettings.java
+│                       │       Application configuration and system constants
+│
+│                       ├── core
+│                       │   ├── CommandExecutor.java
+│                       │   │   Executes parsed voice commands
+│                       │   │
+│                       │   ├── CommandServer.java
+│                       │   │   Handles command communication pipeline
+│                       │   │
+│                       │   └── VoxBackground.java
+│                       │       Manages background services
+│
+│                       ├── net
+│                       │   └── VoxClient.java
+│                       │       Handles networking with VOX Android
+│
+│                       ├── sync
+│                       │   └── ClipboardSyncService.java
+│                       │       Synchronizes clipboard across devices
+│
+│                       ├── system
+│                       │   ├── AudioRecorder.java
+│                       │   ├── MicRecorder.java
+│                       │   ├── WakewordService.java
+│                       │   ├── WhisperRecognizer.java
+│                       │   ├── GoogleSpeechRecognizer.java
+│                       │   ├── ClipboardWatcher.java
+│                       │   ├── NetworkUtil.java
+│                       │   └── SoundPlayer.java
+│                       │
+│                       │   Handles microphone input, wake word detection,
+│                       │   speech recognition, clipboard monitoring, and system utilities
+│
+│                       ├── ui
+│                       │
+│                       │   ├── frame
+│                       │   │   ├── DashboardFrame.java
+│                       │   │   └── LoginFrame.java
+│                       │   │
+│                       │   ├── layouts
+│                       │   │   ├── LeftSidebar.java
+│                       │   │   ├── ProfileSidebar.java
+│                       │   │   └── TopTabs.java
+│                       │   │
+│                       │   ├── reminders
+│                       │   │   └── ReminderList.java
+│                       │   │
+│                       │   ├── screens
+│                       │   │   ├── HomeScreen.java
+│                       │   │   ├── TasksScreen.java
+│                       │   │   ├── HistoryScreen.java
+│                       │   │   ├── RemindersScreen.java
+│                       │   │   └── SettingsScreen.java
+│                       │   │
+│                       │   ├── tasks
+│                       │   │   ├── TaskListPanel.java
+│                       │   │   ├── TaskRow.java
+│                       │   │   └── TaskTabs.java
+│                       │   │
+│                       │   ├── theme
+│                       │   │   ├── VoxTheme.java
+│                       │   │   ├── PixelPanel.java
+│                       │   │   ├── PixelButton.java
+│                       │   │   ├── PixelTextField.java
+│                       │   │   └── FontUtil.java
+│                       │   │
+│                       │   └── widget
+│                       │       └── VoxWidget.java
+│                       │           Floating voice interaction widget
+│
+│                       └── util
+│                           Utility helper classes
+│
+├── resources
+│   ├── avatars
+│   ├── font
+│   ├── icons
+│   ├── loader
+│   ├── sounds
+│   ├── wakeword
+│   ├── widget_states
+│   └── serviceAccountKey.json
 │
 └── README.md
 ```
@@ -245,23 +297,23 @@ vox-pc
 
 # Installation
 
-### Clone the repository
+Clone the repository
 
-```bash
+```
 git clone https://github.com/your-username/vox-pc.git
 ```
 
-### Navigate to the project
+Navigate to the project
 
-```bash
+```
 cd vox-pc
 ```
 
-### Compile and run
+Compile and run
 
-```bash
-javac Main.java
-java Main
+```
+javac App.java
+java App
 ```
 
 ---
@@ -274,7 +326,7 @@ VOX consists of multiple components working together.
 |--------|--------|--------|
 | VOX Android | Kotlin | Task creation and mobile interaction |
 | VOX Desktop | Java | Dashboard and voice control |
-| Cloud Sync | Backend | Data synchronization |
+| Cloud Sync | Firebase | Data synchronization |
 
 ---
 
@@ -282,52 +334,24 @@ VOX consists of multiple components working together.
 
 Planned improvements include:
 
-- Advanced natural language command parsing
-- Multi-device synchronization
-- AI productivity insights
+- Natural language command parsing
+- Multi device synchronization
+- AI based productivity insights
 - Calendar integrations
-- Cross-platform desktop builds
-- Smart notification system
-
----
-
-# Use Cases
-
-VOX Desktop can be useful for:
-
-- Students managing study tasks
-- Developers tracking daily goals
-- Professionals monitoring productivity
-- Users who prefer voice-driven productivity tools
-
----
-
-# Contributing
-
-Contributions are welcome.
-
-Steps:
-
-1. Fork the repository  
-2. Create a new branch  
-3. Commit changes  
-4. Submit a pull request  
-
----
-
-# License
-
-This project is released under the MIT License.
+- Cross platform desktop builds
+- Smart notifications
 
 ---
 
 # Author
 
-**Midhun**  
-B.Tech Computer Science and Engineering (Machine Learning)
+**Midhun**
+
+B.Tech Computer Science and Engineering  
+Specialization: Machine Learning
 
 ---
 
-# Links
+# License
 
-GitHub Repository : https://github.com/Midhun1618/vox-pc
+MIT License
