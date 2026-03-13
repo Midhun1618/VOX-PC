@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.voxcom.vox.App;
 import com.voxcom.vox.ui.frame.DashboardFrame;
+import com.voxcom.vox.voice.VoxTTS;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -25,7 +26,9 @@ public class CommandExecutor {
         try {
 
             if (command.contains("open youtube")) {
+                VoxTTS.speak("Opening YouTube sir, please check my text to speech feature now, is it okay for our purpose");
                 Desktop.getDesktop().browse(new URI("https://youtube.com"));
+                
             } else if (command.contains("open dashboard")) {
                 if (dash != null) {
                     javax.swing.SwingUtilities.invokeLater(() -> {

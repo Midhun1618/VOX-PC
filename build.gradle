@@ -23,5 +23,5 @@ dependencies {
     implementation 'ai.picovoice:porcupine-java:4.0.0'
     implementation 'org.json:json:20240303'
     implementation platform('com.google.cloud:libraries-bom:26.43.0')
-    implementation 'com.google.cloud:google-cloud-speech'
+    implementation 'net.sf.sociaal:freetts:1.2.2'
 }
