@@ -24,7 +24,7 @@ public class VoxTTS {
             } else {
                 voice.allocate();
                 voice.setRate(170);
-                voice.setPitch(150);
+                voice.setPitch(250);
                 voice.setVolume(1.0f);
             }
 

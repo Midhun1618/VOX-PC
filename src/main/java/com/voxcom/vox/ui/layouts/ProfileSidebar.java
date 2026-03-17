@@ -38,7 +38,7 @@ public class ProfileSidebar extends JPanel {
         emailLbl.setFont(FontUtil.PIXEL_12);
         emailLbl.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        add(createAvatar());   // now uses correct index
+        add(createAvatar()); 
 
         add(Box.createVerticalStrut(10));
         add(nameLbl);
@@ -131,7 +131,7 @@ public class ProfileSidebar extends JPanel {
 
     try {
 
-        String path = "/avatars/avatar" + avatarIndex + ".png";
+        String path = "/avatars/avatar" + (avatarIndex+1) + ".png";
         System.out.println(path);
         URL url = getClass().getResource(path);
 
