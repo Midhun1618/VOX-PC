@@ -56,7 +56,7 @@ public class DashboardFrame extends JFrame {
 
         showHome();
 
-        // 🚀 START VOX SERVICES
+        
         startClipboardServices();
 
     }

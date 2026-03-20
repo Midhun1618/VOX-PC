@@ -26,7 +26,7 @@ public class CommandExecutor {
         try {
 
             if (command.contains("open youtube")) {
-                VoxTTS.speak("Opening YouTube sir, please check my text to speech feature now, is it okay for our purpose");
+                VoxTTS.speak("Opening YouTube sir");
                 Desktop.getDesktop().browse(new URI("https://youtube.com"));
                 
             } else if (command.contains("open dashboard")) {
