@@ -28,7 +28,7 @@ public class CommandExecutor {
             if (command.contains("open youtube")) {
                 VoxTTS.speak("Opening YouTube sir");
                 Desktop.getDesktop().browse(new URI("https://youtube.com"));
-                
+
             } else if (command.contains("open dashboard")) {
                 if (dash != null) {
                     javax.swing.SwingUtilities.invokeLater(() -> {
@@ -68,6 +68,19 @@ public class CommandExecutor {
                         dash.showHome();
                     });
 
+                } else if (command.contains("pause") || command.contains("play") || command.contains("play pause")) {
+
+                    try {
+                        Runtime.getRuntime().exec(
+                                "powershell -command (new-object -com wscript.shell).SendKeys([char]179)");
+
+                        System.out.println("Toggled Play/Pause");
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return;
                 }
 
             } else if (command.startsWith("search ") || command.startsWith("ask google")) {
@@ -234,7 +247,7 @@ public class CommandExecutor {
                 Runtime.getRuntime().exec("powershell -command (new-object -com wscript.shell).SendKeys('^l')");
                 Thread.sleep(500);
                 Runtime.getRuntime().exec("powershell -command (new-object -com wscript.shell).SendKeys('^c')");
-                
+
                 Runtime.getRuntime().exec("powershell -command \"(new-object -com wscript.shell).SendKeys('{ESC}')");
                 Runtime.getRuntime().exec("powershell -command \"(new-object -com wscript.shell).SendKeys('{ESC}')");
 
