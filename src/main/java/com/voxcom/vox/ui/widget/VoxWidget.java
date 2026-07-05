@@ -30,14 +30,13 @@ public class VoxWidget {
     private BufferedImage imgOffline;
     private BufferedImage imgError;
 
-    // Animation Timers and Variables
     private Timer scaleTimer;
     private Timer rotationTimer;
     private Timer errorTimer;
 
     private double currentScale = 1.0;
     private double currentRotationDegrees = 0.0;
-    private int currentXOffset = 0; // For vigorous horizontal error shake
+    private int currentXOffset = 0; 
     private BufferedImage currentImage;
 
     public VoxWidget() {
@@ -52,7 +51,6 @@ public class VoxWidget {
         window.setContentPane(mainPanel);
         window.setSize(TARGET_SIZE, TARGET_SIZE);
 
-        // Position at top center with custom padding
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - TARGET_SIZE) / 2;
         window.setLocation(x, TOP_PADDING);
@@ -63,7 +61,6 @@ public class VoxWidget {
     }
 
     public synchronized void setState(String state) {
-        // Halt all ongoing animations and reset positions immediately
         stopScaleAnimation();
         stopListeningAnimation();
         stopErrorAnimation();

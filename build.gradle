@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
+    // 1. Swapped Launch4j out for the official native runtime bundler plugin
+    id 'org.beryx.runtime' version '1.13.1' 
 }
 
 java {
@@ -25,3 +27,37 @@ dependencies {
     implementation platform('com.google.cloud:libraries-bom:26.43.0')
     implementation 'net.sf.sociaal:freetts:1.2.2'
 }
+
+// Automated Installer Configuration Engine
+runtime {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    
+    // Core system modules needed for heavy dependencies (Firebase, Picovoice UI, FreeTTS)
+    modules = ['java.base', 'java.desktop', 'java.logging', 'java.naming', 'java.xml', 'java.sql', 'jdk.crypto.ec'] 
+    
+    jpackage {
+        imageName = 'VOX PC'
+        installerName = 'VOX PC Setup'
+        installerType = 'msi' 
+        
+        // 1. FIXED: Sets the custom icon for the installed application executable shortcut
+        if (file("${projectDir}/voxicon.ico").exists()) {
+            imageOptions = ['--icon', "${projectDir}/voxicon.ico"]
+        } else {
+            imageOptions = []
+        }
+        
+        // 2. Setup menu/directory tools & appends the same custom icon to the setup installation wizard
+        installerOptions = ['--win-dir-chooser', '--win-shortcut', '--win-menu'] 
+        if (file("${projectDir}/voxicon.ico").exists()) {
+            installerOptions += ['--icon', "${projectDir}/voxicon.ico"]
+        }
+        
+        // 3. FIXED: Forces the plugin compiler engine to explicitly bind your custom branding bmp resources directory
+        if (file("${projectDir}/src/main/resources/jpackage/windows").exists()) {
+            resourceDir = file("${projectDir}/src/main/resources/jpackage/windows")
+        }
+    }
+}
+
+
