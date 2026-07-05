@@ -67,8 +67,11 @@ public class CommandExecutor {
                         dash.bringToFront();
                         dash.showHome();
                     });
-
-                } else if (command.contains("pause") || command.contains("play") || command.contains("play pause")) {
+                    
+                }
+                return;
+            }
+            else if (command.contains("pause") || command.contains("play") || command.contains("play pause")) {
 
                     try {
                         Runtime.getRuntime().exec(
@@ -79,9 +82,7 @@ public class CommandExecutor {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    return;
-                }
+        
 
             } else if (command.startsWith("search ") || command.startsWith("ask google")) {
                 String query = "";
@@ -135,7 +136,7 @@ public class CommandExecutor {
                                 "powershell -command (new-object -com wscript.shell).SendKeys([char]174)");
                     }
 
-                    System.out.println("Volume increased");
+                    System.out.println("Volume decreased");
 
                 } catch (Exception e) {
                     e.printStackTrace();
